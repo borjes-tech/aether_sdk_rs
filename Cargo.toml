@@ -1,0 +1,20 @@
+[package]
+name = "aether-sdk"
+version = "0.1.0"
+edition = "2021"
+license = "BUSL-1.1"
+description = "Write Aether plugins as plain Rust: the kernel's functions as a library, with no Extism in sight."
+rust-version = "1.75"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+base64 = "0.22"
+chrono = { version = "0.4", default-features = false, features = ["alloc"] }
+
+# Only a plugin (compiled to WebAssembly) talks to the kernel through Extism. Everywhere
+# else the SDK builds without it, so a plugin's logic can be unit tested natively against
+# `aether_sdk::testing::MockKernel`.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+extism-pdk = { version = "1.4", default-features = false }
